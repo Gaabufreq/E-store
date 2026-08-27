@@ -11,7 +11,7 @@ import cors from 'cors'
 const app = express();  
 
 app.use(cors({
-  origin: "https://e-store-six-chi.vercel.app/", // Aapke React app ka URL (port change ho to update karein)
+  origin: "https://e-store-six-chi.vercel.app", // Aapke React app ka URL (port change ho to update karein)
   credentials: true,                // Cookies pass hone dene ke liye compulsary hai
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
