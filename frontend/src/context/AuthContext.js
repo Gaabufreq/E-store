@@ -28,8 +28,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     const res = await loginUser(userData);
     if (res.data.success) {
-      setUser(res.data.user);
-      await checkAuthStatus();
+      setUser(res.data.user)
     }
     return res.data;
   };
@@ -38,7 +37,6 @@ export const AuthProvider = ({ children }) => {
     const res = await registerUser(userData);
     if (res.data.success) {
       setUser(res.data.user);
-      await checkAuthStatus(); // 🔹 Token Cookie verify karke profile sync karne ke liye
     }
     return res.data;
   };
