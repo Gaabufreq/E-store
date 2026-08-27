@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://e-store-yp7z.onrender.com",
   withCredentials: true, // Cookies pass karne ke liye zaroori hai
   headers: {
     "Content-Type": "application/json",
