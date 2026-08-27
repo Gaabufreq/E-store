@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     const res = await loginUser(userData);
     if (res.data.success) {
       setUser(res.data.user);
+      await checkAuthStatus();
     }
     return res.data;
   };

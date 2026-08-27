@@ -39,8 +39,8 @@ try {
         // 🔹 Cookie set karke Auto-Login feature enable kiya gaya hai
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "strict",  
+            secure: true,
+            sameSite: "none",  
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -90,7 +90,7 @@ export const Login = async (req,res,next) =>{
         res.cookie ("token", token ,{
             httpOnly:true,
             secure:false,
-            sameSite:"strict",  
+            sameSite:"none",  
             maxAge: 24 * 60 * 60 * 1000
         });
 
@@ -130,7 +130,11 @@ export const getProfile = async(req,res,next) =>{
 }
 
 export const logOut = async (req,res) =>{
-    res.clearCookie("token");
+    res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none"
+    });
 
     return res.status(200).json({
         success:true,
