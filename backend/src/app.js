@@ -13,7 +13,7 @@ const app = express();
 const allowedOrigin = [
   "http://localhost:3000",
   "http://localhost:5173",
-  "https:https://e-store-1-pxaw.onrender.com"
+  "https://e-store-1-pxaw.onrender.com"
 ]
 
 app.use(cors({
