@@ -53,7 +53,6 @@ try {
                 email:user.email,
                 age:user.age
             },
-            token
         });
 
 } catch (error) {
@@ -150,7 +149,8 @@ export const updateUser = async (req,res,next)=>{
             req.user.userId,
             {name,age},
             {
-                returnDocument: "after", // iska matlab hai updated profile show kro
+                // returnDocument: "after", // iska matlab hai updated profile show kro
+                new:true,
                 runValidators:true
             }
         ).select("-password")

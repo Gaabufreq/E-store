@@ -10,9 +10,21 @@ import cors from 'cors'
 
 const app = express();  
 
+const allowedOrigin = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https:https://e-store-1-pxaw.onrender.com"
+]
+
 app.use(cors({
-  origin: "https://e-store-six-chi.vercel.app", // Aapke React app ka URL (port change ho to update karein)
-  credentials: true,                // Cookies pass hone dene ke liye compulsary hai
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigin.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));

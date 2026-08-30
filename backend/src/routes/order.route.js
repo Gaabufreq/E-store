@@ -4,6 +4,7 @@ import { authorize } from "../middleware/authorization.middleware.js";
 import {
     createOrder,
     createRazorpayOrder,
+    getAllOrders,
     getMyOrders,
     getOrderById,
     updateOrderStatus,
@@ -23,5 +24,6 @@ orderRoute.post("/verify-payment", verifyPayment)
 
 // Admin only route
 orderRoute.put("/status/:id", authorize("admin"), updateOrderStatus);
+orderRoute.get("/allorders", authorize("admin"), getAllOrders);
 
 export default orderRoute;

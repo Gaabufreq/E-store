@@ -36,7 +36,7 @@ const Dashboard = () => {
         API.get("/auth/allusers").catch(() => ({ data: { users: [] } })),
         getAllProducts().catch(() => ({ data: { products: [] } })),
         getAllCategories().catch(() => ({ data: { category: [] } })),
-        API.get("/order/myorders").catch(() => ({ data: { orders: [] } })),
+        API.get("/order/allorders").catch(() => ({ data: { orders: [] } })),
       ]);
 
       setUsers(uRes.data.users || []);

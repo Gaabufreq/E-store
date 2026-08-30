@@ -13,6 +13,7 @@ import ProductDetails from "./pages/public/ProductDetails";
 import Login from "./pages/public/Login";
 import Register from "./pages/public/Register";
 
+
 // User Protected Pages
 import Cart from "./pages/user/Cart";
 import Checkout from "./pages/user/Checkout";
@@ -45,8 +46,6 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<Placeholder title="Forgot Password" />} />
-            <Route path="/reset-password" element={<Placeholder title="Reset Password" />} />
 
             {/* USER PROTECTED ROUTES */}
             <Route element={<ProtectedRoute />}>

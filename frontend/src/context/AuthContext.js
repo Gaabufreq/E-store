@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { getProfile, loginUser, logoutUser, registerUser } from "../api/authApi.js";
+import { 
+  getProfile, 
+  loginUser, 
+  logoutUser, 
+  registerUser, 
+} from "../api/authApi.js";
 
 const AuthContext = createContext();
 
@@ -10,10 +15,15 @@ export const AuthProvider = ({ children }) => {
   // App load hote hi profile check karke user set karein
   const checkAuthStatus = async () => {
     try {
+
       const res = await getProfile();
+
       if (res.data.success) {
         setUser(res.data.user);
+      }else{
+        setUser(null);
       }
+
     } catch (error) {
       setUser(null);
     } finally {
@@ -28,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     const res = await loginUser(userData);
     if (res.data.success) {
-      setUser(res.data.user)
+      setUser(res.data.user);
     }
     return res.data;
   };
@@ -47,10 +57,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, register, logout, checkAuthStatus }}>
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        setUser, 
+        loading, 
+        login, 
+        register, 
+        logout, 
+        checkAuthStatus, 
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext); 
+export const useAuth = () => useContext(AuthContext);
