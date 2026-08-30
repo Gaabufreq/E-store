@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import API from "../../api/axiosInstance";
 import { getAllProducts, createProduct, updateProduct, deleteProduct } from "../../api/productApi";
 import { getAllCategories, createCategory } from "../../api/categoryApi";
-import { updateOrderStatus } from "../../api/orderApi";
+import { getAllOrders, updateOrderStatus } from "../../api/orderApi";
 import Loader from "../../components/common/Loader";
 
 const Dashboard = () => {
@@ -35,7 +35,7 @@ const Dashboard = () => {
         API.get("/auth/allusers").catch(() => ({ data: { users: [] } })),
         getAllProducts().catch(() => ({ data: { products: [] } })),
         getAllCategories().catch(() => ({ data: { category: [] } })),
-        API.get("/order/allorders").catch(() => ({ data: { orders: [] } })),
+        getAllOrders().catch(() => ({ data: { orders: [] } })),
       ]);
 
       setUsers(uRes.data.users || []);

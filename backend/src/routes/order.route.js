@@ -21,13 +21,16 @@ orderRoute.use(authMiddleware);
 
 orderRoute.post("/createorder", createOrder);
 orderRoute.get("/myorders", getMyOrders);
-orderRoute.get("/:id", getOrderById);
 orderRoute.post("/razorpay-order", createRazorpayOrder)
 orderRoute.post("/verify-payment", verifyPayment)
 orderRoute.put("/cancel/:id",cancelMyOrder)
 
+
 // Admin only route
 orderRoute.put("/status/:id", authorize("admin"), updateOrderStatus);
 orderRoute.get("/allorders", authorize("admin"), getAllOrders);
+
+// dynamic route
+orderRoute.get("/:id", getOrderById);
 
 export default orderRoute;
