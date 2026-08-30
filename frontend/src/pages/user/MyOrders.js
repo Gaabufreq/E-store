@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { getMyOrders, updateOrderStatus } from "../../api/orderApi";
+import { getMyOrders} from "../../api/orderApi";
 import Loader from "../../components/common/Loader";
+import { cancelMyOrder } from "../../api/orderApi";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -27,18 +28,18 @@ const MyOrders = () => {
   }, []);
 
   // Cancel Order Handler
-  const handleCancelOrder = async (orderId) => {
-    if (!window.confirm("Are you sure you want to cancel this order?")) return;
-    try {
-      const res = await updateOrderStatus(orderId, "Cancelled");
-      if (res.data.success) {
-        toast.success("Order cancelled successfully! ❌");
-        fetchOrders();
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to cancel order");
+ const handleCancelOrder = async (orderId) => {
+  if (!window.confirm("Are you sure you want to cancel this order?")) return;
+  try {
+    const res = await cancelMyOrder(orderId); // 👈 Use cancelMyOrder instead of updateOrderStatus
+    if (res.data.success) {
+      toast.success("Order cancelled successfully! ❌");
+      fetchOrders();
     }
-  };
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Failed to cancel order");
+  }
+};
 
   const getStatusBadge = (status = "") => {
     const s = status.toLowerCase();

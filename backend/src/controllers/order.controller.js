@@ -154,6 +154,62 @@ export const updateOrderStatus = async (req, res, next) => {
 };
 
 
+
+// 5. Cancel Order (Logged-in User)
+export const cancelMyOrder = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.userId;
+
+        const order = await Order.findById(id);
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found ❌"
+            });
+        }
+
+        // Check 1: User sirf apna hi order cancel kar sakta hai
+        if (order.user.toString() !== userId.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to cancel this order ❌"
+            });
+        }
+
+        // Check 2: Order sirf tabhi cancel ho sakta hai jab status Processing ho
+        if (order.orderStatus !== "Processing" && order.orderStatus !== "Pending") {
+            return res.status(400).json({
+                success: false,
+                message: `Order cannot be cancelled because it is already ${order.orderStatus} ❌`
+            });
+        }
+
+        // Order Cancel hone par Product Stock Restore (Wapas Add) karein
+        for (const item of order.orderItems) {
+            const product = await Product.findById(item.product);
+            if (product) {
+                product.stock += item.quantity;
+                await product.save();
+            }
+        }
+
+        order.orderStatus = "Cancelled";
+        await order.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Order cancelled successfully ❌",
+            order
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 // Razorpay Order Create
 export const createRazorpayOrder = async (req,res,next) =>{
 try {
