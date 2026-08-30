@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import API from "../../api/axiosInstance";
 import { getAllProducts, createProduct, updateProduct, deleteProduct } from "../../api/productApi";
@@ -341,37 +340,78 @@ const Dashboard = () => {
       {/* --- TAB 3: ORDERS MANAGEMENT --- */}
       {activeTab === "orders" && (
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h2 className="text-lg font-bold text-gray-800 mb-4">All Customer Orders</h2>
+          <h2 className="text-lg font-bold text-gray-800 mb-4">
+            All Customer Orders ({orders.length})
+          </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b bg-gray-50 text-xs text-gray-500 uppercase">
                   <th className="p-3">Order ID</th>
+                  <th className="p-3">Customer</th>
+                  <th className="p-3">Items</th>
                   <th className="p-3">Total Amount</th>
-                  <th className="p-3">Status</th>
+                  <th className="p-3">Current Status</th>
                   <th className="p-3">Update Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {orders.map((o) => (
-                  <tr key={o._id}>
-                    <td className="p-3 font-mono font-bold text-xs">#{o._id}</td>
-                    <td className="p-3 font-extrabold text-indigo-600">₹{o.totalPrice}</td>
-                    <td className="p-3 font-semibold">{o.orderStatus}</td>
-                    <td className="p-3">
-                      <select
-                        value={o.orderStatus}
-                        onChange={(e) => handleOrderStatus(o._id, e.target.value)}
-                        className="px-2 py-1 border rounded-lg text-xs bg-white"
-                      >
-                        <option value="Processing">Processing</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
+                {orders.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="text-center py-6 text-gray-400">
+                      No orders found.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  orders.map((o) => {
+                    const isCancelled = o.orderStatus?.toLowerCase() === "cancelled";
+
+                    return (
+                      <tr key={o._id} className={isCancelled ? "bg-red-50/50" : "hover:bg-gray-50/50"}>
+                        <td className="p-3 font-mono font-bold text-xs">#{o._id}</td>
+                        <td className="p-3">
+                          <p className="font-semibold text-gray-800">{o.user?.name || "N/A"}</p>
+                          <p className="text-xs text-gray-400">{o.user?.email}</p>
+                        </td>
+                        <td className="p-3 text-xs text-gray-600">
+                          {o.orderItems?.map((item, idx) => (
+                            <div key={idx} className="line-clamp-1">
+                              • {item.name} <span className="font-bold text-indigo-600">×{item.quantity}</span>
+                            </div>
+                          ))}
+                        </td>
+                        <td className="p-3 font-extrabold text-indigo-600">₹{o.totalPrice}</td>
+                        <td className="p-3">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-xs font-bold border ${
+                              isCancelled
+                                ? "bg-red-100 text-red-700 border-red-300"
+                                : o.orderStatus === "Delivered"
+                                ? "bg-emerald-100 text-emerald-700 border-emerald-300"
+                                : o.orderStatus === "Shipped"
+                                ? "bg-blue-100 text-blue-700 border-blue-300"
+                                : "bg-amber-100 text-amber-700 border-amber-300"
+                            }`}
+                          >
+                            {o.orderStatus} {isCancelled && "❌"}
+                          </span>
+                        </td>
+                        <td className="p-3">
+                          <select
+                            value={o.orderStatus}
+                            onChange={(e) => handleOrderStatus(o._id, e.target.value)}
+                            className="px-2 py-1 border rounded-lg text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          >
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>

@@ -316,7 +316,7 @@ export const verifyPayment = async (req,res,next) => {
 
 export const getAllOrders = async (req, res, next) => {
     try {
-        const orders = await Order.find().populate("user", "name email").sort({ createdAt: -1 });
+        const orders = await Order.find().populate("user", "name email").populate("orderItems.product", "name price").sort({ createdAt: -1 });
         return res.status(200).json({ success: true, count: orders.length, orders });
     } catch (error) {
         next(error);
